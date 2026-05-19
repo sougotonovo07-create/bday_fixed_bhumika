@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Our Memories 💕</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet"/>
+  <!-- Swiper.js -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+<style>
+/* ============================================================
+   style.css — Global Shared Styles
+   Birthday Surprise Website for Bhumika 💕
+   ============================================================ */
+
+/* ---- CSS Variables (change colors here if you want) ---- */
+:root {
+  --pink:        #ff85a1;
+  --pink-light:  #ffb6c1;
+  --pink-deep:   #e05c80;
+  --lavender:    #dda0dd;
+  --lavender-light: #e6e6fa;
+  --white:       #fff;
+  --cream:       #fff5f8;
+  --text-dark:   #3a2535;
+  --text-mid:    #7a5a6a;
+  --text-light:  #b08090;
+  --shadow:      rgba(255, 133, 161, 0.25);
+  --shadow-deep: rgba(220, 80, 120, 0.18);
+  --border-rad:  20px;
+  --transition:  0.35s cubic-bezier(.4,0,.2,1);
+}
+
+/* ---- Reset ---- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Lato', sans-serif;
+  color: var(--text-dark);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+a { text-decoration: none; color: inherit; }
+
+img { max-width: 100%; height: auto; display: block; }
+
+/* ---- Top Navigation ---- */
+.top-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.5rem;
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 182, 193, 0.3);
+}
+
+.nav-back, .nav-next {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--pink-deep);
+  letter-spacing: 0.03em;
+  transition: opacity var(--transition);
+}
+.nav-back:hover, .nav-next:hover { opacity: 0.7; }
+
+.nav-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: var(--text-mid);
+  font-style: italic;
+}
+
+/* ---- CTA Button ---- */
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2.2rem;
+  background: linear-gradient(135deg, var(--pink), var(--pink-deep));
+  color: #fff;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  box-shadow: 0 6px 24px var(--shadow);
+  transition: transform var(--transition), box-shadow var(--transition);
+  cursor: pointer;
+  border: none;
+}
+.cta-button:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 10px 32px var(--shadow-deep);
+}
+.cta-button:active { transform: scale(0.97); }
+
+/* ---- Music Player ---- */
+.music-player {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 50px;
+  padding: 0.5rem 1rem 0.5rem 0.5rem;
+  box-shadow: 0 4px 20px var(--shadow);
+}
+
+.music-btn {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--pink), var(--lavender));
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform var(--transition);
+}
+.music-btn:hover { transform: scale(1.1); }
+.music-btn.playing::after { content: '⏸'; position: absolute; }
+
+.music-label {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  letter-spacing: 0.05em;
+}
+
+/* ---- Hidden / Visibility ---- */
+.hidden { display: none !important; }
+.fade-out { opacity: 0; transition: opacity 0.6s ease; }
+.fade-in { animation: fadeIn 0.8s ease forwards; }
+
+/* ---- Shared Section Headings ---- */
+.section-header { text-align: center; margin-bottom: 2.5rem; }
+
+.section-pre {
+  font-size: 0.85rem;
+  color: var(--pink);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  color: var(--text-dark);
+  margin-bottom: 0.6rem;
+}
+
+.section-sub {
+  color: var(--text-light);
+  font-size: 1rem;
+  font-style: italic;
+}
+
+/* ---- Animations ---- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-14px); }
+}
+
+@keyframes floatUp {
+  0%   { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.08); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 600px) {
+  .top-nav { padding: 0.7rem 1rem; }
+  .music-player { bottom: 1rem; right: 1rem; }
+}
+
+
+/* ============================================================
+   page2.css — Gallery Page Styles
+   ============================================================ */
+
+.page2-body {
+  background: linear-gradient(150deg, #fff0f5 0%, #fce4f0 50%, #f0e8ff 100%);
+  min-height: 100vh;
+  padding-top: 70px;
+}
+
+.gallery-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 6rem;
+  text-align: center;
+}
+
+/* ---- Swiper ---- */
+.swiper {
+  width: 100%;
+  padding: 2rem 0 3.5rem !important;
+}
+
+.swiper-slide {
+  width: 300px;
+}
+
+/* ---- Memory Card ---- */
+.memory-card {
+  background: rgba(255,255,255,0.75);
+  border: 1.5px solid rgba(255, 182, 193, 0.35);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(255, 133, 161, 0.15);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.swiper-slide-active .memory-card {
+  box-shadow: 0 16px 50px rgba(255, 100, 140, 0.25);
+}
+
+/* ---- Photo Frame ---- */
+.photo-frame {
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(135deg, #ffe0ec, #f0d8ff);
+}
+
+.photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.memory-card:hover .photo-frame img {
+  transform: scale(1.05);
+}
+
+/* ---- Placeholder (remove when you add real photos) ---- */
+.photo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: linear-gradient(135deg, #ffe4ef, #ecdeff);
+}
+
+.ph-icon { font-size: 2.5rem; }
+.ph-text {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  letter-spacing: 0.08em;
+  background: rgba(255,255,255,0.6);
+  padding: 0.3rem 0.8rem;
+  border-radius: 50px;
+}
+
+/* ---- Caption ---- */
+.memory-caption {
+  padding: 1.2rem 1.4rem 1.4rem;
+  text-align: center;
+  background: white;
+}
+
+.caption-heart {
+  font-size: 1.2rem;
+  display: block;
+  margin-bottom: 0.4rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.caption-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  color: var(--text-dark);
+  margin-bottom: 0.3rem;
+}
+
+.caption-sub {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* ---- Swiper custom colors ---- */
+.swiper-button-next, .swiper-button-prev {
+  color: var(--pink) !important;
+}
+.swiper-pagination-bullet-active {
+  background: var(--pink) !important;
+}
+
+/* ---- CTA ---- */
+.gallery-cta {
+  margin-top: 2rem;
+}
+
+@media (max-width: 600px) {
+  .swiper-slide { width: 260px; }
+  .photo-frame { height: 220px; }
+}
+
+</style>
+</head>
+<body class="page2-body">
+
+  <!-- Nav -->
+  <nav class="top-nav">
+    <a href="index.html" class="nav-back">← Home</a>
+    <span class="nav-title">Our Memories</span>
+    <a href="letter.html" class="nav-next">Letter →</a>
+  </nav>
+
+  <div class="gallery-wrapper">
+    <div class="section-header">
+      <p class="section-pre">✨ A walk through time</p>
+      <h2 class="section-title">Our Beautiful Memories</h2>
+      <p class="section-sub">Every picture tells a story. Our story. 💕</p>
+    </div>
+
+    <!-- Swiper Carousel -->
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper">
+
+        <!-- === SLIDE 1 === -->
+        <!-- To add your photo: replace the placeholder div with <img src="images/photo1.jpg" alt="Memory 1"/> -->
+        <div class="swiper-slide">
+          <div class="memory-card">
+            <div class="photo-frame">
+              <div class="photo-placeholder">
+                <span class="ph-icon">📸</span>
+                <span class="ph-text">photo1.jpg</span>
+              </div>
+              <!-- REPLACE ABOVE WITH: <img src="images/photo1.jpg" alt="Our first memory"/> -->
+            </div>
+            <div class="memory-caption">
+              <span class="caption-heart">❤️</span>
+              <p class="caption-text">Our first memory</p>
+              <p class="caption-sub">The beginning of something beautiful</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- === SLIDE 2 === -->
+        <div class="swiper-slide">
+          <div class="memory-card">
+            <div class="photo-frame">
+              <div class="photo-placeholder">
+                <span class="ph-icon">📸</span>
+                <span class="ph-text">photo2.jpg</span>
+              </div>
+              <!-- REPLACE ABOVE WITH: <img src="images/photo2.jpg" alt="My favorite smile"/> -->
+            </div>
+            <div class="memory-caption">
+              <span class="caption-heart">🌸</span>
+              <p class="caption-text">My favorite smile</p>
+              <p class="caption-sub">You light up every room you walk into</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- === SLIDE 3 === -->
+        <div class="swiper-slide">
+          <div class="memory-card">
+            <div class="photo-frame">
+              <div class="photo-placeholder">
+                <span class="ph-icon">📸</span>
+                <span class="ph-text">photo3.jpg</span>
+              </div>
+              <!-- REPLACE ABOVE WITH: <img src="images/photo3.jpg" alt="Forever us"/> -->
+            </div>
+            <div class="memory-caption">
+              <span class="caption-heart">💫</span>
+              <p class="caption-text">Forever us</p>
+              <p class="caption-sub">Every moment with you is a treasure</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- === ADD MORE SLIDES BELOW === -->
+        <!-- Copy a slide block above and change photo path, caption text -->
+
+        <div class="swiper-slide">
+          <div class="memory-card">
+            <div class="photo-frame">
+              <div class="photo-placeholder">
+                <span class="ph-icon">📸</span>
+                <span class="ph-text">photo4.jpg</span>
+              </div>
+            </div>
+            <div class="memory-caption">
+              <span class="caption-heart">🌷</span>
+              <p class="caption-text">Just us two</p>
+              <p class="caption-sub">My favorite place is wherever you are</p>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end swiper-wrapper -->
+
+      <!-- Navigation -->
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-pagination"></div>
+    </div><!-- end swiper -->
+
+    <!-- CTA -->
+    <div class="gallery-cta">
+      <a href="letter.html" class="cta-button">Read My Letter 💌</a>
+    </div>
+  </div>
+
+  <!-- Music Player -->
+  <div class="music-player" id="musicPlayer">
+    <audio id="bgMusic" loop>
+      <source src="music/birthday-song.mp3" type="audio/mpeg"/>
+    </audio>
+    <button class="music-btn" id="musicToggle" onclick="toggleMusic()">🎵</button>
+    <span class="music-label">Music</span>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    const swiper = new Swiper('.mySwiper', {
+      effect: 'coverflow',
+      grabCursor: true,
+      centeredSlides: true,
+      slidesPerView: 'auto',
+      coverflowEffect: {
+        rotate: 30,
+        stretch: 0,
+        depth: 120,
+        modifier: 1,
+        slideShadows: true,
+      },
+      pagination: { el: '.swiper-pagination', clickable: true },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      autoplay: { delay: 4000, disableOnInteraction: false },
+      loop: true,
+    });
+  </script>
+<script>
+/* ============================================================
+   script.js — Shared JavaScript
+   Birthday Surprise Website for Bhumika 💕
+   ============================================================ */
+
+/* =============================================
+   MUSIC PLAYER
+   ============================================= */
+let isMusicPlaying = false;
+
+function toggleMusic() {
+  const music = document.getElementById('bgMusic');
+  const btn = document.getElementById('musicToggle');
+  if (!music) return;
+
+  if (isMusicPlaying) {
+    music.pause();
+    isMusicPlaying = false;
+    btn.textContent = '🎵';
+    btn.title = 'Play music';
+  } else {
+    music.play().then(() => {
+      isMusicPlaying = true;
+      btn.textContent = '⏸️';
+      btn.title = 'Pause music';
+    }).catch(() => {
+      // Autoplay blocked – user must interact first (already handled via button click)
+      console.log('Music autoplay blocked by browser. User can click the button.');
+    });
+  }
+}
+
+function updateMusicBtn(playing) {
+  isMusicPlaying = playing;
+  const btn = document.getElementById('musicToggle');
+  if (btn) btn.textContent = playing ? '⏸️' : '🎵';
+}
+
+/* =============================================
+   FLOATING HEARTS (Page 1)
+   ============================================= */
+function generateHearts() {
+  const container = document.getElementById('heartsContainer');
+  if (!container) return;
+
+  const symbols = ['❤️', '💕', '💗', '🌸', '✨', '💖', '💝'];
+
+  for (let i = 0; i < 22; i++) {
+    const heart = document.createElement('div');
+    heart.className = 'floating-heart';
+    heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+    // Random horizontal position
+    heart.style.left = Math.random() * 100 + 'vw';
+    // Random size
+    heart.style.fontSize = (0.9 + Math.random() * 1.4) + 'rem';
+    // Random speed
+    heart.style.animationDuration = (8 + Math.random() * 12) + 's';
+    // Random delay so they don't all start at once
+    heart.style.animationDelay = '-' + Math.random() * 12 + 's';
+    // Random opacity
+    heart.style.opacity = 0.4 + Math.random() * 0.5;
+
+    container.appendChild(heart);
+  }
+}
+
+/* =============================================
+   ROSE PETALS (Page 3)
+   ============================================= */
+function generatePetals() {
+  const container = document.getElementById('petalsContainer');
+  if (!container) return;
+
+  const petals = ['🌸', '🌷', '🌺', '💮', '🏵️'];
+
+  for (let i = 0; i < 16; i++) {
+    const petal = document.createElement('div');
+    petal.className = 'petal';
+    petal.textContent = petals[Math.floor(Math.random() * petals.length)];
+
+    petal.style.left = Math.random() * 100 + 'vw';
+    petal.style.fontSize = (0.8 + Math.random() * 0.8) + 'rem';
+    petal.style.animationDuration = (6 + Math.random() * 10) + 's';
+    petal.style.animationDelay = '-' + Math.random() * 10 + 's';
+    petal.style.opacity = 0.5 + Math.random() * 0.4;
+
+    container.appendChild(petal);
+  }
+}
+
+/* =============================================
+   PAGE ENTRANCE ANIMATION
+   ============================================= */
+document.addEventListener('DOMContentLoaded', () => {
+  // Fade in body content
+  document.body.style.opacity = '0';
+  document.body.style.transition = 'opacity 0.6s ease';
+  requestAnimationFrame(() => {
+    document.body.style.opacity = '1';
+  });
+});
+
+</script>
+</body>
+</html>

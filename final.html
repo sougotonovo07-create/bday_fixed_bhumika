@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Forever Yours 💕</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&family=Dancing+Script:wght@600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<style>
+/* ============================================================
+   style.css — Global Shared Styles
+   Birthday Surprise Website for Bhumika 💕
+   ============================================================ */
+
+/* ---- CSS Variables (change colors here if you want) ---- */
+:root {
+  --pink:        #ff85a1;
+  --pink-light:  #ffb6c1;
+  --pink-deep:   #e05c80;
+  --lavender:    #dda0dd;
+  --lavender-light: #e6e6fa;
+  --white:       #fff;
+  --cream:       #fff5f8;
+  --text-dark:   #3a2535;
+  --text-mid:    #7a5a6a;
+  --text-light:  #b08090;
+  --shadow:      rgba(255, 133, 161, 0.25);
+  --shadow-deep: rgba(220, 80, 120, 0.18);
+  --border-rad:  20px;
+  --transition:  0.35s cubic-bezier(.4,0,.2,1);
+}
+
+/* ---- Reset ---- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Lato', sans-serif;
+  color: var(--text-dark);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+a { text-decoration: none; color: inherit; }
+
+img { max-width: 100%; height: auto; display: block; }
+
+/* ---- Top Navigation ---- */
+.top-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.5rem;
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 182, 193, 0.3);
+}
+
+.nav-back, .nav-next {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--pink-deep);
+  letter-spacing: 0.03em;
+  transition: opacity var(--transition);
+}
+.nav-back:hover, .nav-next:hover { opacity: 0.7; }
+
+.nav-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: var(--text-mid);
+  font-style: italic;
+}
+
+/* ---- CTA Button ---- */
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2.2rem;
+  background: linear-gradient(135deg, var(--pink), var(--pink-deep));
+  color: #fff;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  box-shadow: 0 6px 24px var(--shadow);
+  transition: transform var(--transition), box-shadow var(--transition);
+  cursor: pointer;
+  border: none;
+}
+.cta-button:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 10px 32px var(--shadow-deep);
+}
+.cta-button:active { transform: scale(0.97); }
+
+/* ---- Music Player ---- */
+.music-player {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 50px;
+  padding: 0.5rem 1rem 0.5rem 0.5rem;
+  box-shadow: 0 4px 20px var(--shadow);
+}
+
+.music-btn {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--pink), var(--lavender));
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform var(--transition);
+}
+.music-btn:hover { transform: scale(1.1); }
+.music-btn.playing::after { content: '⏸'; position: absolute; }
+
+.music-label {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  letter-spacing: 0.05em;
+}
+
+/* ---- Hidden / Visibility ---- */
+.hidden { display: none !important; }
+.fade-out { opacity: 0; transition: opacity 0.6s ease; }
+.fade-in { animation: fadeIn 0.8s ease forwards; }
+
+/* ---- Shared Section Headings ---- */
+.section-header { text-align: center; margin-bottom: 2.5rem; }
+
+.section-pre {
+  font-size: 0.85rem;
+  color: var(--pink);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  color: var(--text-dark);
+  margin-bottom: 0.6rem;
+}
+
+.section-sub {
+  color: var(--text-light);
+  font-size: 1rem;
+  font-style: italic;
+}
+
+/* ---- Animations ---- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-14px); }
+}
+
+@keyframes floatUp {
+  0%   { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.08); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 600px) {
+  .top-nav { padding: 0.7rem 1rem; }
+  .music-player { bottom: 1rem; right: 1rem; }
+}
+
+
+/* ============================================================
+   page5.css — Final / Forever Page Styles
+   ============================================================ */
+
+.page5-body {
+  background: linear-gradient(160deg, #fff0f5 0%, #ffe8f4 35%, #f0e4ff 100%);
+  min-height: 100vh;
+  padding-top: 70px;
+}
+
+.fireworks-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---- Wrapper ---- */
+.final-wrapper {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 6rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* ---- Countdown ---- */
+.countdown-pre {
+  font-size: 0.82rem;
+  color: var(--pink);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.countdown-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  color: var(--text-dark);
+  margin-bottom: 1.5rem;
+}
+
+.countdown-grid {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.count-box {
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(255, 182, 193, 0.35);
+  border-radius: 18px;
+  padding: 1.2rem 1.5rem;
+  min-width: 90px;
+  box-shadow: 0 6px 24px var(--shadow);
+}
+
+.count-box span {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
+  color: var(--pink-deep);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.count-box label {
+  font-size: 0.7rem;
+  color: var(--text-light);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ---- Birthday Section ---- */
+.bday-emoji {
+  font-size: 3rem;
+  margin-bottom: 0.8rem;
+  animation: float 2s ease-in-out infinite;
+}
+
+.bday-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  color: var(--text-dark);
+  margin-bottom: 0.6rem;
+}
+
+.bday-sub {
+  color: var(--text-mid);
+  font-style: italic;
+  font-size: 1rem;
+}
+
+/* ---- Final Message Card ---- */
+.final-message-card {
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(255, 182, 193, 0.35);
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 10px 40px rgba(255, 133, 161, 0.15);
+}
+
+.final-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  line-height: 1.75;
+  color: var(--text-dark);
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.final-sub {
+  font-size: 0.95rem;
+  color: var(--text-mid);
+}
+
+/* ---- Love Button ---- */
+.love-btn-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.love-button {
+  position: relative;
+  padding: 1rem 3rem;
+  background: linear-gradient(135deg, #ff85a1, #e05c80);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.15rem;
+  font-family: 'Playfair Display', serif;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(224, 92, 128, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.love-button:hover {
+  transform: scale(1.06) translateY(-2px);
+  box-shadow: 0 12px 40px rgba(224, 92, 128, 0.5);
+}
+
+.love-btn-glow {
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.love-button.btn-clicked {
+  animation: pulse 0.4s ease;
+}
+
+/* ---- Forever Reveal ---- */
+.forever-reveal {
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.forever-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(2rem, 7vw, 3.5rem);
+  color: var(--pink-deep);
+  margin-bottom: 0.5rem;
+}
+
+.forever-emoji {
+  font-size: 1.8rem;
+  letter-spacing: 0.2em;
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ---- Restart ---- */
+.restart-section { padding-bottom: 1rem; }
+
+.restart-link {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s;
+}
+.restart-link:hover { color: var(--pink); }
+
+@media (max-width: 480px) {
+  .count-box { min-width: 72px; padding: 1rem; }
+  .count-box span { font-size: 1.8rem; }
+}
+
+</style>
+</head>
+<body class="page5-body">
+
+  <div class="fireworks-container" id="fireworksContainer"></div>
+
+  <!-- Nav -->
+  <nav class="top-nav">
+    <a href="surprise.html" class="nav-back">← Surprise</a>
+    <span class="nav-title">Forever</span>
+    <a href="index.html" class="nav-next">Home 🏠</a>
+  </nav>
+
+  <div class="final-wrapper">
+
+    <!-- Countdown OR Birthday Message -->
+    <div class="countdown-section" id="countdownSection">
+      <p class="countdown-pre">✨ Counting down to the most special day ✨</p>
+      <h2 class="countdown-title">Her Birthday is Coming!</h2>
+      <div class="countdown-grid" id="countdownGrid">
+        <div class="count-box"><span id="cd-days">00</span><label>Days</label></div>
+        <div class="count-box"><span id="cd-hours">00</span><label>Hours</label></div>
+        <div class="count-box"><span id="cd-mins">00</span><label>Minutes</label></div>
+        <div class="count-box"><span id="cd-secs">00</span><label>Seconds</label></div>
+      </div>
+    </div>
+
+    <!-- Birthday message (shown on 21 July) -->
+    <div class="bday-section hidden" id="bdaySection">
+      <div class="bday-emoji">🎂✨🎉</div>
+      <h2 class="bday-title">It's Your Special Day Today!</h2>
+      <p class="bday-sub">The whole universe is celebrating YOU right now 🌸</p>
+    </div>
+
+    <!-- Final romantic message -->
+    <div class="final-message-card">
+      <p class="final-quote">
+        "No matter how many birthdays come,<br/>
+        I want to celebrate every single one of them<br/>
+        with you, my love."
+      </p>
+      <p class="final-sub">Happy Birthday, Bhumika. I love you to the moon and back. 🌙</p>
+    </div>
+
+    <!-- Love Button -->
+    <div class="love-btn-section">
+      <button class="love-button" id="loveBtn" onclick="revealLove()">
+        <span class="love-btn-text">I Love You ❤️</span>
+        <div class="love-btn-glow"></div>
+      </button>
+
+      <div class="forever-reveal hidden" id="foreverReveal">
+        <div class="forever-text">Forever Yours ❤️</div>
+        <div class="forever-emoji">💍🌹✨💕🌸</div>
+      </div>
+    </div>
+
+    <!-- Back to start -->
+    <div class="restart-section">
+      <a href="index.html" class="restart-link">↩ Relive the surprise from the beginning</a>
+    </div>
+
+  </div>
+
+  <!-- Music Player -->
+  <div class="music-player" id="musicPlayer">
+    <audio id="bgMusic" loop>
+      <source src="music/birthday-song.mp3" type="audio/mpeg"/>
+    </audio>
+    <button class="music-btn" id="musicToggle" onclick="toggleMusic()">🎵</button>
+    <span class="music-label">Music</span>
+  </div>
+<script>
+    // ===== BIRTHDAY DATE: Change month/day if needed =====
+    // Month is 0-indexed: June=5, July=6
+    const BIRTHDAY_MONTH = 6; // July
+    const BIRTHDAY_DAY = 21;
+    // =====================================================
+
+    function updateCountdown() {
+      const now = new Date();
+      const year = now.getFullYear();
+      let bday = new Date(year, BIRTHDAY_MONTH, BIRTHDAY_DAY, 0, 0, 0);
+      if (now > bday) bday = new Date(year + 1, BIRTHDAY_MONTH, BIRTHDAY_DAY, 0, 0, 0);
+
+      // Check if today IS birthday
+      const isToday = now.getMonth() === BIRTHDAY_MONTH && now.getDate() === BIRTHDAY_DAY;
+      if (isToday) {
+        document.getElementById('countdownSection').classList.add('hidden');
+        document.getElementById('bdaySection').classList.remove('hidden');
+        launchFireworks();
+        return;
+      }
+
+      const diff = bday - now;
+      const days = Math.floor(diff / (1000*60*60*24));
+      const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+      const mins = Math.floor((diff % (1000*60*60)) / (1000*60));
+      const secs = Math.floor((diff % (1000*60)) / 1000);
+
+      document.getElementById('cd-days').textContent = String(days).padStart(2,'0');
+      document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
+      document.getElementById('cd-mins').textContent = String(mins).padStart(2,'0');
+      document.getElementById('cd-secs').textContent = String(secs).padStart(2,'0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    function revealLove() {
+      const btn = document.getElementById('loveBtn');
+      const reveal = document.getElementById('foreverReveal');
+      btn.classList.add('btn-clicked');
+      reveal.classList.remove('hidden');
+      reveal.classList.add('reveal-animate');
+      launchFireworks();
+    }
+
+    function launchFireworks() {
+      const colors = ['#ffb6c1','#ff69b4','#ffd700','#ff85a1','#dda0dd','#e6e6fa'];
+      const duration = 4000;
+      const end = Date.now() + duration;
+      (function frame() {
+        confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0 }, colors });
+        confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1 }, colors });
+        if (Date.now() < end) requestAnimationFrame(frame);
+      })();
+    }
+  </script>
+<script>
+/* ============================================================
+   script.js — Shared JavaScript
+   Birthday Surprise Website for Bhumika 💕
+   ============================================================ */
+
+/* =============================================
+   MUSIC PLAYER
+   ============================================= */
+let isMusicPlaying = false;
+
+function toggleMusic() {
+  const music = document.getElementById('bgMusic');
+  const btn = document.getElementById('musicToggle');
+  if (!music) return;
+
+  if (isMusicPlaying) {
+    music.pause();
+    isMusicPlaying = false;
+    btn.textContent = '🎵';
+    btn.title = 'Play music';
+  } else {
+    music.play().then(() => {
+      isMusicPlaying = true;
+      btn.textContent = '⏸️';
+      btn.title = 'Pause music';
+    }).catch(() => {
+      // Autoplay blocked – user must interact first (already handled via button click)
+      console.log('Music autoplay blocked by browser. User can click the button.');
+    });
+  }
+}
+
+function updateMusicBtn(playing) {
+  isMusicPlaying = playing;
+  const btn = document.getElementById('musicToggle');
+  if (btn) btn.textContent = playing ? '⏸️' : '🎵';
+}
+
+/* =============================================
+   FLOATING HEARTS (Page 1)
+   ============================================= */
+function generateHearts() {
+  const container = document.getElementById('heartsContainer');
+  if (!container) return;
+
+  const symbols = ['❤️', '💕', '💗', '🌸', '✨', '💖', '💝'];
+
+  for (let i = 0; i < 22; i++) {
+    const heart = document.createElement('div');
+    heart.className = 'floating-heart';
+    heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+    // Random horizontal position
+    heart.style.left = Math.random() * 100 + 'vw';
+    // Random size
+    heart.style.fontSize = (0.9 + Math.random() * 1.4) + 'rem';
+    // Random speed
+    heart.style.animationDuration = (8 + Math.random() * 12) + 's';
+    // Random delay so they don't all start at once
+    heart.style.animationDelay = '-' + Math.random() * 12 + 's';
+    // Random opacity
+    heart.style.opacity = 0.4 + Math.random() * 0.5;
+
+    container.appendChild(heart);
+  }
+}
+
+/* =============================================
+   ROSE PETALS (Page 3)
+   ============================================= */
+function generatePetals() {
+  const container = document.getElementById('petalsContainer');
+  if (!container) return;
+
+  const petals = ['🌸', '🌷', '🌺', '💮', '🏵️'];
+
+  for (let i = 0; i < 16; i++) {
+    const petal = document.createElement('div');
+    petal.className = 'petal';
+    petal.textContent = petals[Math.floor(Math.random() * petals.length)];
+
+    petal.style.left = Math.random() * 100 + 'vw';
+    petal.style.fontSize = (0.8 + Math.random() * 0.8) + 'rem';
+    petal.style.animationDuration = (6 + Math.random() * 10) + 's';
+    petal.style.animationDelay = '-' + Math.random() * 10 + 's';
+    petal.style.opacity = 0.5 + Math.random() * 0.4;
+
+    container.appendChild(petal);
+  }
+}
+
+/* =============================================
+   PAGE ENTRANCE ANIMATION
+   ============================================= */
+document.addEventListener('DOMContentLoaded', () => {
+  // Fade in body content
+  document.body.style.opacity = '0';
+  document.body.style.transition = 'opacity 0.6s ease';
+  requestAnimationFrame(() => {
+    document.body.style.opacity = '1';
+  });
+});
+
+</script>
+</body>
+</html>
